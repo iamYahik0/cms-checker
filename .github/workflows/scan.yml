@@ -1,0 +1,89 @@
+name: Check CMS
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  split-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Split List
+        run: |
+          mkdir -p list/
+          cd list/
+          split -l 20000 ../list.txt
+          pwd
+          ls -la
+      - name: Store Splited List
+        uses: actions/upload-artifact@v1
+        with:
+          name: splited-list
+          path: ./list
+  cms-check:
+    needs: split-file
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        chklist: [xaa, xab, xac, xad, xae, xaf, xag, xah, xai, xaj, xak, xal, xam, xan, xao, xap, xaq, xar, xas, xat, xau, xav, xaw, xax, xay]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Get Splited Lists
+        uses: actions/download-artifact@v1
+        with:
+          name: splited-list
+          path: ./list
+      - name: List Files In Current Directory
+        run: |
+          ls -laR .
+      - name: CMS Checker
+        run: |
+          pwd
+          olp=${{ matrix.chklist }}
+          if [ -f "list/${olp}" ]; then
+            timeout 90m python3 main.py ${olp}
+          else
+            echo "Skipping......"
+          fi
+
+      - name: Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: ./results
+          if-no-files-found: ignore
+  transfer-to-telegram:
+    needs: cms-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Results
+        uses: actions/download-artifact@v1
+        with:
+          name: results
+          path: ./checked-list
+      - name: List Result Files
+        run: ls -laR .
+      - name: Send To Telegram
+        run: |
+          mkdir -p results
+          find ./checked-list | grep "joomla" &> /dev/null && cat ./checked-list/joomla-*.txt >> ./results/joomla.txt
+          find ./checked-list | grep "opencart" &> /dev/null && cat ./checked-list/opencart-*.txt >> ./results/opencart.txt
+          find ./checked-list | grep "unknown" &> /dev/null && cat ./checked-list/unknown-*.txt >> ./results/unknown.txt
+          zip -r results.zip results/
+          ls -la
+          curl -s -F caption=" * CMS Checker Results *
+          Date: $(date '+%d-%m-%y')
+          Time Of Upload: $(date '+%H:%M:%S')
+          Live Host Found: $(cat ./results/*.txt | wc -l)
+          - Coded By @xploitednoob -" -F document=@results.zip ${{ secrets.BOT_URL }}
+      - name: Upload Final Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: cms-results
+          path: ./results
