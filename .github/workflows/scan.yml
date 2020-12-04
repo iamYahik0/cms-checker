@@ -27,7 +27,6 @@ jobs:
   cms-check:
     needs: split-file
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       matrix:
         chklist: [xaa, xab, xac, xad, xae, xaf, xag, xah, xai, xaj, xak, xal, xam, xan, xao, xap, xaq, xar, xas, xat, xau, xav, xaw, xax, xay]
@@ -47,11 +46,11 @@ jobs:
           pwd
           olp=${{ matrix.chklist }}
           if [ -f "list/${olp}" ]; then
-            timeout 90m python3 main.py ${olp}
+            timeout 30m python3 main.py ${olp}
           else
             echo "Skipping......"
           fi
-
+        continue-on-error: true
       - name: Result
         uses: actions/upload-artifact@v2
         with:
