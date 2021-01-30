@@ -54,16 +54,16 @@ def DetectCMS(site):
         print(r+" - "+site+" --> Invalid")
 
 def AdvCheck(domain):
-    try:
         for X in ['/','/blog','/forum','/forums', '/shop']:
-            ne_a='http://'
-            ne_w=ne_a+domain+X
-            ktn00 = requests.get(ne_w, headers=UA, verify=False, timeout=20).status_code
-            if ktn00==200:
-                DetectCMS(ne_w)
-    except :
-        print(r+" - "+domain+" --> Invalid")
-
+            try:
+                ne_a='http://'
+                ne_w=ne_a+domain+X
+                ktn00 = requests.get(ne_w, headers=UA, verify=False, timeout=20).status_code
+                if ktn00==200:
+                    DetectCMS(ne_w)
+            except :
+                print(r+" - "+domain+" --> Invalid")
+                break
 if __name__ == '__main__':
     logo()
     try:
