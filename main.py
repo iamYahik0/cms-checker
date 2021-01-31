@@ -90,16 +90,18 @@ def DetectCMS(site):
             print(g+" Unknown >> "+site)
             open('results/unknown-'+lala+'.txt','a').write(site+'\n')
     except Exception as e:
-        print(e)
+        #print(e)
         print(r+" Invalid >> "+site)
 
 def AdvCheck(domain):
         for path in ['/','/blog/','/forum/','/forums/', '/shop/']:
             try:
                 ne_w='http://'+domain+path
-                DetectCMS(ne_w)
+                checkres = requests.get(RawSite, headers=UA, timeout=20).status_code
+                if checkres == "200":
+                    DetectCMS(ne_w)
             except Exception as e:
-                print(e)
+                #print(e)
                 print(r+" Invalid >> "+ne_w)
 if __name__ == '__main__':
     logo()
@@ -107,7 +109,7 @@ if __name__ == '__main__':
         Target = "list/"+lala
         TEXTList = open(Target, 'r').read().splitlines()
         try:
-            with concurrent.futures.ThreadPoolExecutor(400) as executor:
+            with concurrent.futures.ThreadPoolExecutor(350) as executor:
                 executor.map(AdvCheck, TEXTList)
         except Exception as e:
             print(e)
