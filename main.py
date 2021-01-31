@@ -100,7 +100,7 @@ if __name__ == '__main__':
         Target = "list/"+lala
         TEXTList = open(Target, 'r').read().splitlines()
         try:
-            with concurrent.futures.ThreadPoolExecutor(10) as executor:
+            with concurrent.futures.ThreadPoolExecutor(300) as executor:
                 executor.map(AdvCheck, TEXTList)
         except Exception as e:
             print(e)
