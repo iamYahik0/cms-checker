@@ -94,15 +94,17 @@ def AdvCheck(domain):
                 snew=requests.get(ne_w, headers=UA, timeout=20).status_code
                 if snew==200:
                     DetectCMS(ne_w)
+                else:
+                    print(r+" !!!200 >> "+ne_w)
             except:
-                print(r+" Invalid >> "+ne_w)
+                print(r+" Invalid >> "+domain)
 if __name__ == '__main__':
     logo()
     try:
         Target = "list/"+lala
         TEXTList = open(Target, 'r').read().splitlines()
         try:
-            with concurrent.futures.ThreadPoolExecutor(300) as executor:
+            with concurrent.futures.ThreadPoolExecutor(250) as executor:
                 executor.map(AdvCheck, TEXTList)
         except Exception as e:
             print(e)
