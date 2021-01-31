@@ -1,8 +1,5 @@
 from multiprocessing.dummy import Pool
-import requests, re, concurrent.futures, sys, platform, os
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+import requests, re, concurrent.futures, sys, os
 
 r = '\x1b[31m'
 g = '\x1b[32m'
@@ -28,8 +25,7 @@ def logo():
 
 def DetectCMS(site):
     ## List Of Page
-    RawSite = site
-    Robots0 = site+"robots.txt"
+    Robots0 = '{}robots.txt'.format(site)
     Joomla1 = '{}administrator/index.php'.format(site)
     Joomla2 = '{}plugins/system/debug/debug.xml'.format(site)
     Joomla3 = '{}administrator/language/en-GB/install.xml'.format(site)
@@ -38,15 +34,14 @@ def DetectCMS(site):
     Bitrix1 = '{}bitrix/admin/'.format(site)
 
     ## List Of Requests
-    CheckHead = requests.get(RawSite, headers=UA, timeout=15)
-    CheckRaw0 = CheckHead.text.lower()
-    CheckRob0 = requests.get(Robots0, headers=UA, timeout=15).text.lower()
-    CheckJom1 = requests.get(Joomla1, headers=UA, timeout=15).text.lower()
-    CheckJom2 = requests.get(Joomla2, headers=UA, timeout=15).text.lower()
-    CheckJom3 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
-    CheckOpc1 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
-    CheckOpc2 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
-    CheckBit1 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
+    CheckRaw0 = requests.get(site, headers=UA, timeout=20).text.lower()
+    CheckRob0 = requests.get(Robots0, headers=UA, timeout=20).text.lower()
+    CheckJom1 = requests.get(Joomla1, headers=UA, timeout=20).text.lower()
+    CheckJom2 = requests.get(Joomla2, headers=UA, timeout=20).text.lower()
+    CheckJom3 = requests.get(Joomla3, headers=UA, timeout=20).text.lower()
+    CheckOpc1 = requests.get(Opcart1, headers=UA, timeout=20).text.lower()
+    CheckOpc2 = requests.get(Opcart2, headers=UA, timeout=20).text.lower()
+    CheckBit1 = requests.get(Bitrix1, headers=UA, timeout=20).text.lower()
 
     ## List Of Checks
     ResJoomlaRobots1 = 'if the joomla site is installed' #CheckRob0
@@ -89,7 +84,7 @@ def DetectCMS(site):
         else:
             print(g+" Unknown >> "+site)
             open('results/unknown-'+lala+'.txt','a').write(site+'\n')
-    except Exception as e:
+    except:
         #print(e)
         print(r+" Invalid >> "+site)
 
@@ -97,10 +92,10 @@ def AdvCheck(domain):
         for path in ['/','/blog/','/forum/','/forums/', '/shop/']:
             try:
                 ne_w='http://'+domain+path
-                checkres = requests.get(RawSite, headers=UA, timeout=20).status_code
+                checkres = requests.get(ne_w, headers=UA, timeout=20).status_code
                 if checkres == "200":
                     DetectCMS(ne_w)
-            except Exception as e:
+            except:
                 #print(e)
                 print(r+" Invalid >> "+ne_w)
 if __name__ == '__main__':
