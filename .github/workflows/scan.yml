@@ -74,7 +74,9 @@ jobs:
           find ./checked-list | grep "joomla" &> /dev/null && cat ./checked-list/joomla-*.txt >> ./results/joomla.txt
           find ./checked-list | grep "opencart" &> /dev/null && cat ./checked-list/opencart-*.txt >> ./results/opencart.txt
           find ./checked-list | grep "drupal" &> /dev/null && cat ./checked-list/drupal-*.txt >> ./results/drupal.txt
-          find ./checked-list | grep "laravel" &> /dev/null && cat ./checked-list/laravel-*.txt >> ./results/drupal.txt
+          find ./checked-list | grep "magento" &> /dev/null && cat ./checked-list/magento-*.txt >> ./results/magento.txt
+          find ./checked-list | grep "bitrix" &> /dev/null && cat ./checked-list/bitrix-*.txt >> ./results/bitrix.txt
+          find ./checked-list | grep "modx" &> /dev/null && cat ./checked-list/modx-*.txt >> ./results/modx.txt
           find ./checked-list | grep "unknown" &> /dev/null && cat ./checked-list/unknown-*.txt >> ./results/unknown.txt
           zip -r results.zip results/
           ls -la
