@@ -26,51 +26,88 @@ def logo():
       CMS Checker | Developer @Sh0ya1337 | V1.0'''
     print("\x1b[1;31m"+x+"\x1b[0m \n")
 
-
 def DetectCMS(site):
+    ## List Of Page
+    RawSite = site
+    Robots0 = site+"robots.txt"
+    Joomla1 = '{}administrator/index.php'.format(site)
+    Joomla2 = '{}plugins/system/debug/debug.xml'.format(site)
+    Joomla3 = '{}administrator/language/en-GB/install.xml'.format(site)
+    Opcart1 = '{}admin/index.php'.format(site)
+    Opcart2 = '{}admin/view/javascript/common.js'.format(site)
+    Bitrix1 = '{}bitrix/admin/'.format(site)
+
+    ## List Of Requests
+    CheckHead = requests.get(RawSite, headers=UA, timeout=15)
+    CheckRaw0 = CheckHead.text.lower()
+    CheckRob0 = requests.get(Robots0, headers=UA, timeout=15).text.lower()
+    CheckJom1 = requests.get(Joomla1, headers=UA, timeout=15).text.lower()
+    CheckJom2 = requests.get(Joomla2, headers=UA, timeout=15).text.lower()
+    CheckJom3 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
+    CheckOpc1 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
+    CheckOpc2 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
+    CheckBit1 = requests.get(Joomla3, headers=UA, timeout=15).text.lower()
+
+    ## List Of Checks
+    ResJoomlaRobots1 = 'if the joomla site is installed' #CheckRob0
+    ResJoomlaSource1 = 'content="joomla!' #CheckJom1
+    ResJoomlaSource2 = 'css/joomla.css' #CheckRaw0
+    ResJoomlaSource3 = '<author>joomla!' #CheckJom2||CheckJom3
+    ResOpcartSource1 = 'powered by <a href="http://www.opencart.com">opencart' #CheckRaw0
+    ResOpcartSource2 = 'catalog/view/javascript/jquery/swiper/css/opencart.css' #CheckRaw0
+    ResOpcartSource3 = 'index.php?route=' #CheckRaw0
+    ResOpcartSource4 = 'common/login' #CheckOp1
+    ResOpcartSource5 = 'geturlvar(key)' #CheckOpc2
+    ResDrupalRobots1 = 'allow: /core/*.css$' #CheckRob0
+    ResDrupalRobots2 = 'disallow: /index.php/user/login/' #CheckRob0
+    ResDrupalRobots3 = 'disallow: /web.config' #CheckRob0
+    ResDrupalSource1 = '/misc/drupal.js' #CheckRaw0
+    ResMagentSource1 = 'x-magento-init' #CheckRaw0
+    ResMagentSource2 = '/skin/frontend/' #CheckRaw0
+    ResMagentSource3 = '/mage/cookies.js' #CheckRaw0
+    ResBitrixSource1 = '/bitrix/js/main/' #CheckBit1
+    ResMODXSource1 = 'powered by modx' #CheckRaw0
     try:
-        Joomla0 = requests.get(site, headers=UA, verify=False, timeout=15)
-        Joomla1 = Joomla0.text
-        Joomla2 = requests.get('{}/administrator/'.format(site), headers=UA, verify=False, timeout=15).text
-        Joomla3 = requests.get('{}/administrator/help/en-GB/toc.json'.format(site), headers=UA, verify=False, timeout=15).text
-        Opencart1 = requests.get('{}/admin/view/javascript/common.js'.format(site), headers=UA, verify=False, timeout=15).text
-        Opencart2 = requests.get('{}/admin/index.php'.format(site), headers=UA, verify=False, timeout=15).text
-        if 'window.Joomla' in Joomla1 or 'content="Joomla!' in Joomla2 or '<author>Joomla!' in Joomla3:
-            print(g+" - "+site+" --> Joomla")
+        if ResJoomlaRobots1 in CheckRob0 or ResJoomlaSource1 in CheckJom1 or ResJoomlaSource2 in CheckRaw0 or ResJoomlaSource3 in CheckJom2 or ResJoomlaSource3 in CheckJom3:
+            print(g+" Joomla >> "+site)
             open('results/joomla-'+lala+'.txt','a').write(site+'\n')
-        elif '/sites/default/' in Joomla1:
-            print(g+" - "+site+" --> Drupal")
-            open('results/drupal-'+lala+'.txt','a').write(site+'\n')
-        elif 'laravel_session' in Joomla0.cookies:
-            print(g+" - "+site+" --> Laravel")
-            open('results/laravel-'+lala+'.txt','a').write(site+'\n')
-        elif 'catalog/view/' in Joomla1 or 'getURLVar(key)' in Opencart1 or 'common/login' in Opencart2:
-            print(g+" - "+site+" --> Opencart")
+        elif ResOpcartSource1 in CheckRaw0 or ResOpcartSource2 in CheckRaw0 or ResOpcartSource3 in CheckRaw0 or ResOpcartSource4 in CheckOpc1 or ResOpcartSource5 in CheckOpc2:
+            print(g+" Opencart >> "+site)
             open('results/opencart-'+lala+'.txt','a').write(site+'\n')
+        elif ResDrupalRobots1 in CheckRob0 or ResDrupalRobots2 in CheckRob0 or ResDrupalRobots3 in CheckRob0 or ResDrupalSource1 in CheckRaw0:
+            print(g+" Drupal >> "+site)
+            open('results/drupal-'+lala+'.txt','a').write(site+'\n')
+        elif ResMODXSource1 in CheckRaw0:
+            print(g+" MODX >> "+site)
+            open('results/modx-'+lala+'.txt','a').write(site+'\n')
+        elif ResBitrixSource1 in CheckBit1:
+            print(g+" Bitrix >> "+site)
+            open('results/bitrix-'+lala+'.txt','a').write(site+'\n')
+        elif ResMagentSource1 in CheckRaw0 or ResMagentSource2 in CheckRaw0 or ResMagentSource3 in CheckRaw0 :
+            print(g+" Magento >> "+site)
+            open('results/magento-'+lala+'.txt','a').write(site+'\n')
         else:
-            print(g+" - "+site+" --> Unknown")
+            print(g+" Unknown >> "+site)
             open('results/unknown-'+lala+'.txt','a').write(site+'\n')
-    except:
-        print(r+" - "+site+" --> Invalid")
+    except Exception as e:
+        print(e)
+        print(r+" Invalid >> "+site)
 
 def AdvCheck(domain):
-        for X in ['/','/blog','/forum','/forums', '/shop']:
+        for path in ['/','/blog/','/forum/','/forums/', '/shop/']:
             try:
-                ne_a='http://'
-                ne_w=ne_a+domain+X
-                ktn00 = requests.get(ne_w, headers=UA, verify=False, timeout=20).status_code
-                if ktn00==200:
-                    DetectCMS(ne_w)
-            except :
-                print(r+" - "+domain+" --> Invalid")
-                break
+                ne_w='http://'+domain+path
+                DetectCMS(ne_w)
+            except Exception as e:
+                print(e)
+                print(r+" Invalid >> "+ne_w)
 if __name__ == '__main__':
     logo()
     try:
         Target = "list/"+lala
         TEXTList = open(Target, 'r').read().splitlines()
         try:
-            with concurrent.futures.ThreadPoolExecutor(200) as executor:
+            with concurrent.futures.ThreadPoolExecutor(10) as executor:
                 executor.map(AdvCheck, TEXTList)
         except Exception as e:
             print(e)
