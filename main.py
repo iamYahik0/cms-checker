@@ -91,7 +91,9 @@ def AdvCheck(domain):
         for path in ['/','/blog/','/forum/','/forums/', '/shop/']:
             try:
                 ne_w='http://'+domain+path
-                DetectCMS(ne_w)
+                snew=requests.get(ne_w, headers=UA, timeout=20).status_code
+                if snew==200:
+                    DetectCMS(ne_w)
             except:
                 print(r+" Invalid >> "+ne_w)
 if __name__ == '__main__':
