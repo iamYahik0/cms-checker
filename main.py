@@ -85,18 +85,14 @@ def DetectCMS(site):
             print(g+" Unknown >> "+site)
             open('results/unknown-'+lala+'.txt','a').write(site+'\n')
     except:
-        #print(e)
         print(r+" Invalid >> "+site)
 
 def AdvCheck(domain):
         for path in ['/','/blog/','/forum/','/forums/', '/shop/']:
             try:
                 ne_w='http://'+domain+path
-                checkres = requests.get(ne_w, headers=UA, timeout=20).status_code
-                if checkres == "200":
-                    DetectCMS(ne_w)
+                DetectCMS(ne_w)
             except:
-                #print(e)
                 print(r+" Invalid >> "+ne_w)
 if __name__ == '__main__':
     logo()
@@ -104,7 +100,7 @@ if __name__ == '__main__':
         Target = "list/"+lala
         TEXTList = open(Target, 'r').read().splitlines()
         try:
-            with concurrent.futures.ThreadPoolExecutor(350) as executor:
+            with concurrent.futures.ThreadPoolExecutor(10) as executor:
                 executor.map(AdvCheck, TEXTList)
         except Exception as e:
             print(e)
