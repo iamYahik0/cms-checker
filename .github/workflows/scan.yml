@@ -80,11 +80,6 @@ jobs:
           find ./checked-list | grep "unknown" &> /dev/null && cat ./checked-list/unknown-*.txt >> ./results/unknown.txt
           zip -r results.zip results/
           ls -la
-          curl -s -F caption=" * Hentai CMS Checker *
-          Date: $(date '+%d-%m-%y')
-          Time Of Upload: $(date '+%H:%M:%S')
-          Live Host Found: $(cat ./results/*.txt | wc -l)
-          - Coded By @sh0ya1337-" -F document=@results.zip ${{ secrets.BOT_URL }}
       - name: Upload Final Artifacts
         uses: actions/upload-artifact@v1
         with:
