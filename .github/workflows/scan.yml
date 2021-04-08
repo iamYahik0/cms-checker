@@ -46,7 +46,7 @@ jobs:
           pwd
           olp=${{ matrix.chklist }}
           if [ -f "list/${olp}" ]; then
-            timeout 30m python3 main.py ${olp}
+            timeout 45m python3 main.py ${olp}
           else
             echo "Skipping......"
           fi
@@ -57,7 +57,7 @@ jobs:
           name: results
           path: ./results
           if-no-files-found: ignore
-  transfer-to-telegram:
+  all-in-one:
     needs: cms-check
     runs-on: ubuntu-latest
     steps:
