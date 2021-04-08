@@ -13,14 +13,7 @@ if not os.path.isdir('results'):
 lala = sys.argv[1]
 
 def logo():
-    x = '''
-    ██╗  ██╗███████╗███╗   ██╗████████╗ █████╗ ██╗
-    ██║  ██║██╔════╝████╗  ██║╚══██╔══╝██╔══██╗██║
-    ███████║█████╗  ██╔██╗ ██║   ██║   ███████║██║
-    ██╔══██║██╔══╝  ██║╚██╗██║   ██║   ██╔══██║██║
-    ██║  ██║███████╗██║ ╚████║   ██║   ██║  ██║██║
-    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝
-      CMS Checker | Developer @Sh0ya1337 | V1.0'''
+    x = '''CMS Checker | Developer @Sh0ya1337 | V1.0'''
     print("\x1b[1;31m"+x+"\x1b[0m \n")
 
 def DetectCMS(site):
@@ -53,10 +46,6 @@ def DetectCMS(site):
     ResOpcartSource3 = 'index.php?route=' #CheckRaw0
     ResOpcartSource4 = 'common/login' #CheckOp1
     ResOpcartSource5 = 'geturlvar(key)' #CheckOpc2
-    ResDrupalRobots1 = 'allow: /core/*.css$' #CheckRob0
-    ResDrupalRobots2 = 'disallow: /index.php/user/login/' #CheckRob0
-    ResDrupalRobots3 = 'disallow: /web.config' #CheckRob0
-    ResDrupalSource1 = '/misc/drupal.js' #CheckRaw0
     ResMagentSource1 = 'x-magento-init' #CheckRaw0
     ResMagentSource2 = '/skin/frontend/' #CheckRaw0
     ResMagentSource3 = '/mage/cookies.js' #CheckRaw0
@@ -69,9 +58,6 @@ def DetectCMS(site):
         elif ResOpcartSource1 in CheckRaw0 or ResOpcartSource2 in CheckRaw0 or ResOpcartSource3 in CheckRaw0 or ResOpcartSource4 in CheckOpc1 or ResOpcartSource5 in CheckOpc2:
             print(g+" Opencart >> "+site)
             open('results/opencart-'+lala+'.txt','a').write(site+'\n')
-        elif ResDrupalRobots1 in CheckRob0 or ResDrupalRobots2 in CheckRob0 or ResDrupalRobots3 in CheckRob0 or ResDrupalSource1 in CheckRaw0:
-            print(g+" Drupal >> "+site)
-            open('results/drupal-'+lala+'.txt','a').write(site+'\n')
         elif ResMODXSource1 in CheckRaw0:
             print(g+" MODX >> "+site)
             open('results/modx-'+lala+'.txt','a').write(site+'\n')
@@ -88,7 +74,7 @@ def DetectCMS(site):
         print(r+" Invalid >> "+site)
 
 def AdvCheck(domain):
-        for path in ['/','/blog/','/forum/','/forums/', '/shop/']:
+        for path in ['/','/blog/','/forum/','/test/','/opencart/','/joomla','/magento/','/shop/']:
             try:
                 ne_w='http://'+domain+path
                 snew=requests.get(ne_w, headers=UA, timeout=20).status_code
