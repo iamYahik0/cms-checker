@@ -46,7 +46,7 @@ jobs:
           pwd
           olp=${{ matrix.chklist }}
           if [ -f "list/${olp}" ]; then
-            timeout 45m python3 main.py ${olp}
+            timeout 22m python3 main.py ${olp}
           else
             echo "Skipping......"
           fi
