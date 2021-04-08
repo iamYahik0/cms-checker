@@ -74,7 +74,7 @@ def DetectCMS(site):
         print(r+" Invalid >> "+site)
 
 def AdvCheck(domain):
-        for path in ['/','/blog/','/forum/','/test/','/opencart/','/joomla','/magento/','/shop/']:
+        for path in ['/','/blog/','/forum/','/test/']:
             try:
                 ne_w='http://'+domain+path
                 snew=requests.get(ne_w, headers=UA, timeout=20).status_code
