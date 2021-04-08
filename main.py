@@ -84,6 +84,7 @@ def AdvCheck(domain):
                     print(r+" !!!200 >> "+ne_w)
             except:
                 print(r+" Invalid >> "+domain)
+                break
 if __name__ == '__main__':
     logo()
     try:
